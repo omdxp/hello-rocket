@@ -1,3 +1,5 @@
+mod async_routes;
+
 #[macro_use]
 extern crate rocket;
 
@@ -14,7 +16,10 @@ fn hello(name: String, age: u8) -> String {
 #[rocket::main]
 async fn main() {
     rocket::build()
-        .mount("/", routes![index])
+        .mount(
+            "/",
+            routes![index, async_routes::delay, async_routes::blocking_task],
+        )
         .mount("/hello", routes![hello])
         .launch()
         .await;
