@@ -6,7 +6,16 @@ fn index() -> &'static str {
     "Hello, rocket!"
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+#[get("/<name>/<age>")]
+fn hello(name: String, age: u8) -> String {
+    format!("Hello, {} year old named {}!", age, name)
+}
+
+#[rocket::main]
+async fn main() {
+    rocket::build()
+        .mount("/", routes![index])
+        .mount("/hello", routes![hello])
+        .launch()
+        .await;
 }
