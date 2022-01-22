@@ -22,10 +22,16 @@ async fn main() {
         .mount("/public", FileServer::from("static/"))
         .mount(
             "/",
-            routes![index, async_routes::delay, async_routes::blocking_task,],
+            routes![
+                index,
+                async_routes::delay,
+                async_routes::blocking_task,
+                segments::foo_bar
+            ],
         )
         .mount("/hello", routes![hello])
         .mount("/files", routes![segments::files])
+        .mount("/everything", routes![segments::everything])
         .launch()
         .await;
 }
