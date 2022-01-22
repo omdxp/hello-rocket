@@ -1,4 +1,5 @@
 mod async_routes;
+mod ranking;
 mod segments;
 
 #[macro_use]
@@ -32,6 +33,10 @@ async fn main() {
         .mount("/hello", routes![hello])
         .mount("/files", routes![segments::files])
         .mount("/everything", routes![segments::everything])
+        .mount(
+            "/user",
+            routes![ranking::user, ranking::user_int, ranking::user_str],
+        )
         .launch()
         .await;
 }
