@@ -1,7 +1,10 @@
 mod async_routes;
+mod segments;
 
 #[macro_use]
 extern crate rocket;
+
+use rocket::fs::FileServer;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -16,11 +19,13 @@ fn hello(name: String, age: u8) -> String {
 #[rocket::main]
 async fn main() {
     rocket::build()
+        .mount("/public", FileServer::from("static/"))
         .mount(
             "/",
-            routes![index, async_routes::delay, async_routes::blocking_task],
+            routes![index, async_routes::delay, async_routes::blocking_task,],
         )
         .mount("/hello", routes![hello])
+        .mount("/files", routes![segments::files])
         .launch()
         .await;
 }
